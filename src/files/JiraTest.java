@@ -26,7 +26,7 @@ public class JiraTest {
 		
 		String expectedMessage = "Hi! How are you?";
 		//Adding comment to existing Bug
-		String addCommentResponse = given().pathParam("id", "10000").log().all().header("Content-Type", "application/json").body("{\r\n" + 
+		String addCommentResponse = given().pathParam("id", "10003").log().all().header("Content-Type", "application/json").body("{\r\n" + 
 				"    \"body\": \""+expectedMessage+"\",\r\n" + 
 				"    \"visibility\": {\r\n" + 
 				"        \"type\": \"role\",\r\n" + 
@@ -55,13 +55,13 @@ public class JiraTest {
 				"}").filter(session).when().post("/rest/api/2/issue").then().log().all().assertThat().statusCode(201);
 		
 		//Add attachment
-		given().header("X-Atlassian-Token", "no-check").filter(session).pathParam("id", "10000")
+		given().header("X-Atlassian-Token", "no-check").filter(session).pathParam("id", "10003")
 		.header("Content-Type", "multipart/form-data")
 		.multiPart("file", new File("jira.txt")).when()
 		.post("/rest/api/2/issue/{id}/attachments").then().log().all().assertThat().statusCode(200);
 		
 		//Get issue
-		String issueDetails = given().filter(session).pathParam("id", "10000")
+		String issueDetails = given().filter(session).pathParam("id", "10003")
 				.queryParam("fields", "comment")
 				.log().all().get("/rest/api/2/issue/{id}").then()
 				.log().all().extract().response().asString();
